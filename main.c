@@ -1,6 +1,6 @@
 #include "shell.h"
 /**
- * main - launches shell from a script file or runs in interactive mode.
+ * main - launches shell from script file or runs in interactive mode.
  * @argc: is the count of the arguments passed to the program
  * @argv: is an array of strings containing the arguments
  * Return: int
