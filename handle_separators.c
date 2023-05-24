@@ -112,3 +112,40 @@ void handle_command_line_separators(char *command)
 	}
 	exit(exit_status);
 }
+void handle_command_line_separators3(char *command)
+{
+	const char *delimiters = "&|;";
+	char *token, *trimmed_command;
+	pid_t pid;
+	int num_args = 0;
+	char *args[64];
+	int exit_status = 0;
+	int should_execute_next = 1;
+
+	token = strtok(command, delimiters);
+	while (token != NULL)
+	{
+		trimmed_command = token;
+		token = strtok(NULL, delimiters);
+		if (strcmp(trimmed_command, "&&") == 0)
+		{
+			exit_status = exit_status == 0 ? 1 : 0;
+		}
+		else if (strcmp(trimmed_command, "||") == 0)
+		{
+			exit_status = exit_status != 0 ? 1 : 0;
+		}
+		else if (should_execute_next)
+		{
+			pid = fork();
+			if (pid == 0)
+			{
+				args[num_args++] = strtok(trimmed_command, " ");
+				while ((args[num_args++] = strtok(NULL, " ")) != NULL);
+				execvp(args[0], args);
+				perror("execvp");
+				exit(1);
+			}
+		}
+	}
+}
