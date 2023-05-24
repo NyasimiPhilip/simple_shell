@@ -55,7 +55,8 @@ void handle_command_line_separators2(char *command)
 			if (pid == 0)
 			{
 				args[num_args++] = strtok(trimmed_command, " ");
-				while ((args[num_args++] = strtok(NULL, " ")) != NULL);
+				while
+					((args[num_args++] = strtok(NULL, " ")) != NULL);
 				execvp(args[0], args);
 				perror("execvp");
 				exit(1);
@@ -97,7 +98,7 @@ void handle_command_line_separators(char *command)
 		else if (pid > 0)
 		{
 			int status;
-		
+
 			waitpid(pid, &status, 0);
 			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 			{
