@@ -73,7 +73,7 @@ void handle_command_line_separators2(char *command)
 
 void handle_command_line_separators(char *command)
 {
-	const char *delimiters = "&|;";
+	const char *delimiters = "&|";
 	char *token, *trimmed_command;
 	pid_t pid;
 	int num_args = 0;
