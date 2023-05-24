@@ -131,6 +131,9 @@ void shellTwo(void)
 		if (feof(input_stream))
 			break;
 		command[strcspn(command, "\n")] = '\0';
+		/*comment_pos = strchr(command, '#');
+		if (comment_pos != NULL)
+			*comment_pos = '\0';*/
 		handle_comments(command);
 		if (contains_separator(command))
 		{
@@ -146,7 +149,6 @@ void shellTwo(void)
 		}
 		if (command[i] == '\0')
 			exit(EXIT_SUCCESS);
-		handle_command_line_separators2(command);
 		num_args = parse_arguments(command, args);
 		check_commands(args, num_args);
 	}
