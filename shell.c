@@ -123,7 +123,7 @@ void shellTwo(void)
 	char *args[MAX_NUM_ARGS + 1];
 	int num_args, i;
 	FILE *input_stream = stdin;
-	const char *delimiters = "&|";
+	const char *delimiters = "&|;";
 
 	if (!isatty(fileno(stdin)))
 		input_stream = stdin;
