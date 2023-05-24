@@ -139,7 +139,7 @@ void shellTwo(void)
 		handle_comments(command);
 		while(1)
 		{
-			handle_command_line_separators(command);
+			handle_command_line_separators3(command);
 			break;
 		}
 		handle_variable_replacement(command);
