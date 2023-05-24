@@ -123,6 +123,7 @@ void shellTwo(void)
 	char *args[MAX_NUM_ARGS + 1];
 	int num_args, i;
 	FILE *input_stream = stdin;
+	const char *delimiters = "&|;";
 
 	if (!isatty(fileno(stdin)))
 		input_stream = stdin;
@@ -137,10 +138,9 @@ void shellTwo(void)
 		 * comment_pos = '\0';
 		 */
 		handle_comments(command);
-		while(1)
+		if (strpbrk(command, delimiters) != NULL)
 		{
-			handle_command_line_separators3(command);
-			break;
+			handle_command_line_separators(command);
 		}
 		handle_variable_replacement(command);
 
