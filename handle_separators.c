@@ -28,51 +28,6 @@ char *trim(char *str)
  */
 void handle_command_line_separators2(char *command)
 {
-	const char *delimiters = "||&&";
-	char *token;
-	int exit_status = 0;
-	char *args[64];
-
-	while ((token = strtok(command, delimiters)) != NULL)
-	{
-		char *trimmed_command = trim(token);
-		pid_t pid = fork();
-
-		if (pid == 0)
-		{
-			int num_args = 0;
-
-			args[num_args++] = strtok(trimmed_command, " ");
-			while
-				((args[num_args++] = strtok(NULL, " ")) != NULL);
-			execvp(args[0], args);
-			perror("execvp");
-			exit(1);
-		}
-		else if (pid > 0)
-		{
-			int status;
-			int child_exit_status = WEXITSTATUS(status);
-
-			waitpid(pid, &status, 0);
-			if ((exit_status == 0 && token[0] == '|') && child_exit_status == 0)
-				break;
-			else if ((exit_status != 0 && token[0] == '&') && child_exit_status != 0)
-				break;
-			if (exit_status == 0 || child_exit_status != 0)
-				exit_status = child_exit_status;
-		}
-	}
-}
-/**
- * handle_command_line_separators - handles command line separators
- * @command: command passed
- * Return: void
- */
-
-
-void handle_command_line_separators(char *command)
-{
 	const char *delimiters = "&|";
 	char *token, *trimmed_command;
 	pid_t pid;
@@ -108,3 +63,54 @@ void handle_command_line_separators(char *command)
 		}
 	}
 }
+
+/**
+ * handle_command_line_separators - handles command line separators
+ * @command: command passed
+ * Return: void
+ */
+
+
+void handle_command_line_separators(char *command)
+{
+	const char *separator = ";";
+	char *token, *trimmed_command;
+	pid_t pid;
+	int num_args = 0;
+	char *args[64];
+	int exit_status = 0;
+
+	token = strtok(command, separator);
+	while (token != NULL)
+	{
+		trimmed_command = trim(token);
+		pid = fork();
+		if (pid == 0)
+		{
+			args[num_args++] = strtok(trimmed_command, " ");
+			while ((args[num_args++] = strtok(NULL, " ")) != NULL)
+				;
+			execvp(args[0], args);
+			perror("execvp");
+			exit(1);
+		}
+		else if (pid > 0)
+		{
+			int status;
+		
+			waitpid(pid, &status, 0);
+			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+			{
+				exit_status = 2;
+			}
+		}
+		else
+		{
+			perror("fork");
+			exit(1);
+		}
+		token = strtok(NULL, separator);
+	}
+	exit(exit_status);
+}
+
