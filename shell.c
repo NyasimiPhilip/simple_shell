@@ -137,10 +137,10 @@ void shellTwo(void)
 		 * comment_pos = '\0';
 		 */
 		handle_comments(command);
-		if (contains_separator(command))
+		while(1)
 		{
 			handle_command_line_separators(command);
-			continue;
+			break;
 		}
 		handle_variable_replacement(command);
 
