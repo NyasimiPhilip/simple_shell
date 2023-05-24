@@ -39,3 +39,4 @@ void handle_command_with_args(const char *command, char *args[])
 		/* failed to fork*/
 		perror("fork");
 	}
+}
